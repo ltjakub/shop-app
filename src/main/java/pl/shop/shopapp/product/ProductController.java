@@ -36,17 +36,20 @@ public class ProductController {
         List<ProductDto> products = productService.findAllProducts();
         return ResponseEntity.ok(products);
     }
+
     @GetMapping("/page/{offset}")
-    ResponseEntity<Page<ProductDto>> getPaginatedProducts (@PathVariable int offset) {
+    ResponseEntity<Page<ProductDto>> getPaginatedProducts(@PathVariable int offset) {
         Page<ProductDto> productsWithPagination = productService.findProductsWithPagination(offset, MAX_NUMBER_OF_PRODUCTS_ON_PAGE);
         return ResponseEntity.ok(productsWithPagination);
     }
+
     @GetMapping("/{id}")
     ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         return productService.findProductById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
     @PostMapping
     ResponseEntity<ProductDto> addNewProduct(@Valid @RequestBody ProductDto productDto) {
         ProductDto savedProductDto = productService.addNewProduct(productDto);
@@ -65,15 +68,17 @@ public class ProductController {
                 .stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
     }
+
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
+
     @PatchMapping("/{id}")
     ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody JsonMergePatch patch) {
         try {
-        ProductDto productDto = productService.findProductById(id).orElseThrow();
+            ProductDto productDto = productService.findProductById(id).orElseThrow();
             ProductDto patchedProduct = applyPatch(productDto, patch);
             productService.updateProduct(patchedProduct);
             return ResponseEntity.noContent().build();

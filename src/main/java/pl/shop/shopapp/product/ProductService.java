@@ -21,17 +21,21 @@ public class ProductService {
         productRepository.findAll().forEach(product -> productDtos.add(mapper.map(product)));
         return productDtos;
     }
+
     Page<ProductDto> findProductsWithPagination(int offset, int pageSize) {
         return productRepository.findAll(PageRequest.of(offset, pageSize)).map(mapper::map);
     }
+
     Optional<ProductDto> findProductById(Long id) {
         return productRepository.findById(id).map(mapper::map);
     }
+
     ProductDto addNewProduct(ProductDto productDto) {
         Product product = mapper.map(productDto);
         Product savedProduct = productRepository.save(product);
         return mapper.map(savedProduct);
     }
+
     void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }

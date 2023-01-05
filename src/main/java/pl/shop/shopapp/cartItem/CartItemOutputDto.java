@@ -1,8 +1,11 @@
 package pl.shop.shopapp.cartItem;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import pl.shop.shopapp.product.Product;
-@Data
+
+@Getter
+@Setter
 public class CartItemOutputDto {
     private Long Id;
     private Product product;

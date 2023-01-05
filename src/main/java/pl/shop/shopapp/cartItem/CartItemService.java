@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.shop.shopapp.cart.Cart;
 import pl.shop.shopapp.cart.CartRepository;
+import pl.shop.shopapp.cartItem.response.CartItemResponse;
+import pl.shop.shopapp.cartItem.response.ResponseMapper;
 import pl.shop.shopapp.product.Product;
 import pl.shop.shopapp.product.ProductRepository;
 
@@ -17,9 +19,10 @@ public class CartItemService {
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
     private final CartItemDtoOutputMapper mapper;
+    private final ResponseMapper responseMapper;
 
     void addProductToTheCart(CartItemDto cartItemDto) {
-        if(cartItemRepository.countCartItemByCart_Id(cartItemDto.getCartId()) < 3) {
+        if (cartItemRepository.countCartItemByCart_Id(cartItemDto.getCartId()) < 3) {
             try {
                 Product product = productRepository.findById(cartItemDto.getProductId()).orElseThrow();
                 Cart cart = cartRepository.findById(cartItemDto.getCartId()).orElseThrow();
@@ -27,27 +30,26 @@ public class CartItemService {
                 cartItem.setProduct(product);
                 cartItem.setCart(cart);
                 cartItem.setQuantity(cartItemDto.getQuantity());
-//            if(cartItemRepository.existsByCart_IdAndProduct_Id(cart.getId(), product.getId())) {
-//                System.out.println("test");
-//            } TBI
                 cartItemRepository.save(cartItem);
 
-            } catch(NoSuchElementException e) {
+            } catch (NoSuchElementException e) {
                 System.err.println("Product or cart with provided ID doesn't exist.");
             }
         }
 
     }
+
     void removeProductFromTheCart(Long id) {
         cartItemRepository.deleteById(id);
     }
-    List<CartItemOutputDto> findAllProductsInTheCart() {
-        System.out.println(cartItemRepository.findAll());
-        List<CartItemOutputDto> cartItems = cartItemRepository.findAll()
+
+    CartItemResponse findAllProductsInTheCart(Long id) {
+        List<CartItemOutputDto> cartItems = cartItemRepository.findCartItemByCart_Id(id)
                 .stream()
                 .map(mapper::map)
                 .toList();
-        return cartItems;
+        return responseMapper.map(cartItems);
+
     }
 
 

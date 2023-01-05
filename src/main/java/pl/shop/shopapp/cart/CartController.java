@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/createcart")
 public class CartController {
     private final CartService cartService;
-    @PostMapping( "/{userId}")
+
+    @PostMapping("/{userId}")
     ResponseEntity<?> createCart(@PathVariable Long userId) {
         cartService.createCart(userId);
         return ResponseEntity.noContent().build();

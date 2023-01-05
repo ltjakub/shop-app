@@ -24,10 +24,4 @@ public class Cart {
     @JoinColumn(name = "cart_id")
     private Set<CartItem> cartItems;
 
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "id=" + id +
-                '}';
-    }
 }

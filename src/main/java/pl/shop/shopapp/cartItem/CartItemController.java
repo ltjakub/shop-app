@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import pl.shop.shopapp.cartItem.response.CartItemResponse;
 
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -23,14 +23,16 @@ public class CartItemController {
         cartItemService.addProductToTheCart(cartItemDto);
         return ResponseEntity.noContent().build();
     }
+
     @DeleteMapping("/{id}")
     ResponseEntity<?> removeProductFromTheCart(@PathVariable Long id) {
         cartItemService.removeProductFromTheCart(id);
         return ResponseEntity.noContent().build();
     }
-    @GetMapping
-    ResponseEntity<List<CartItemOutputDto>> findAllProducts() {
-        List<CartItemOutputDto> allProducts = cartItemService.findAllProductsInTheCart();
+
+    @GetMapping("/{id}")
+    ResponseEntity<CartItemResponse> findAllProducts(@PathVariable Long id) {
+        CartItemResponse allProducts = cartItemService.findAllProductsInTheCart(id);
         return ResponseEntity.ok(allProducts);
     }
 
@@ -40,6 +42,7 @@ public class CartItemController {
     String handleMethodArgumentNotValidException(IllegalArgumentException ex) {
         return ex.getMessage();
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     Map<String, String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
