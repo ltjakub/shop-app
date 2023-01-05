@@ -31,7 +31,7 @@ public class CartItemController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<CartItemResponse> findAllProducts(@PathVariable Long id) {
+    ResponseEntity<CartItemResponse> findAllProductsInCart(@PathVariable Long id) {
         CartItemResponse allProducts = cartItemService.findAllProductsInTheCart(id);
         return ResponseEntity.ok(allProducts);
     }
