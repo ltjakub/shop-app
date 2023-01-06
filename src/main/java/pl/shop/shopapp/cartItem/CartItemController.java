@@ -30,9 +30,9 @@ public class CartItemController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<CartItemResponse> findAllProductsInCart(@PathVariable Long id) {
-        CartItemResponse allProducts = cartItemService.findAllProductsInTheCart(id);
+    @GetMapping("/{cartId}")
+    ResponseEntity<CartItemResponse> findAllProductsInCart(@PathVariable Long cartId) {
+        CartItemResponse allProducts = cartItemService.findAllProductsInTheCart(cartId);
         return ResponseEntity.ok(allProducts);
     }
 
