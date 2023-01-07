@@ -8,9 +8,11 @@ import pl.shop.shopapp.cartItem.response.CartItemResponse;
 import pl.shop.shopapp.cartItem.response.ResponseMapper;
 import pl.shop.shopapp.product.Product;
 import pl.shop.shopapp.product.ProductRepository;
+import pl.shop.shopapp.utils.Error;
+import pl.shop.shopapp.utils.exceptions.ResourceNotFoundException;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+
 
 @Service
 @RequiredArgsConstructor
@@ -23,18 +25,13 @@ public class CartItemService {
 
     void addProductToTheCart(CartItemDto cartItemDto) {
         if (cartItemRepository.countCartItemByCart_Id(cartItemDto.getCartId()) < 3) {
-            try {
-                Product product = productRepository.findById(cartItemDto.getProductId()).orElseThrow();
-                Cart cart = cartRepository.findById(cartItemDto.getCartId()).orElseThrow();
+                Product product = productRepository.findById(cartItemDto.getProductId()).orElseThrow(() -> new ResourceNotFoundException(Error.PRODUCT_NOT_FOUND.toString()));
+                Cart cart = cartRepository.findById(cartItemDto.getCartId()).orElseThrow(() -> new ResourceNotFoundException(Error.CART_NOT_FOUND.toString()));
                 CartItem cartItem = new CartItem();
                 cartItem.setProduct(product);
                 cartItem.setCart(cart);
                 cartItem.setQuantity(cartItemDto.getQuantity());
                 cartItemRepository.save(cartItem);
-
-            } catch (NoSuchElementException e) {
-                System.err.println("Product or cart with provided ID doesn't exist.");
-            }
         }
 
     }
@@ -49,8 +46,6 @@ public class CartItemService {
                 .map(mapper::map)
                 .toList();
         return responseMapper.map(cartItems);
-
     }
-
 
 }

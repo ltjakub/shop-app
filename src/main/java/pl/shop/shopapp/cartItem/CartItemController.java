@@ -19,33 +19,30 @@ public class CartItemController {
     private final CartItemService cartItemService;
 
     @PostMapping
-    ResponseEntity<?> addProductToTheCart(@Valid @RequestBody CartItemDto cartItemDto) {
+    public void addProductToTheCart(@Valid @RequestBody CartItemDto cartItemDto) {
         cartItemService.addProductToTheCart(cartItemDto);
-        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> removeProductFromTheCart(@PathVariable Long id) {
+    public void removeProductFromTheCart(@PathVariable Long id) {
         cartItemService.removeProductFromTheCart(id);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{cartId}")
-    ResponseEntity<CartItemResponse> findAllProductsInCart(@PathVariable Long cartId) {
+    public ResponseEntity<CartItemResponse> findAllProductsInCart(@PathVariable Long cartId) {
         CartItemResponse allProducts = cartItemService.findAllProductsInTheCart(cartId);
         return ResponseEntity.ok(allProducts);
     }
 
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
-    String handleMethodArgumentNotValidException(IllegalArgumentException ex) {
+    private String handleMethodArgumentNotValidException(IllegalArgumentException ex) {
         return ex.getMessage();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    Map<String, String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    private Map<String, String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         return ex.getBindingResult().getFieldErrors()
                 .stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));

@@ -4,11 +4,13 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
-    <include file="changelog/0001_create_table_users.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/0000_create_table_address.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/0001_create_table_client.xml" relativeToChangelogFile="true"/>
     <include file="changelog/0002_create_table_product.xml" relativeToChangelogFile="true"/>
     <include file="changelog/0003_create_table_cart.xml" relativeToChangelogFile="true"/>
     <include file="changelog/0004_create_table_cart_item.xml" relativeToChangelogFile="true"/>
-    <include file="testData/0001_users.sql" relativeToChangelogFile="true"/>
+    <include file="testData/0005_address.sql" relativeToChangelogFile="true"/>
+    <include file="testData/0001_client.sql" relativeToChangelogFile="true"/>
     <include file="testData/0002_products.sql" relativeToChangelogFile="true"/>
     <include file="testData/0003_carts.sql" relativeToChangelogFile="true"/>
     <include file="testData/0004_cart_items.sql" relativeToChangelogFile="true"/>

@@ -57,8 +57,7 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonConverter.convertToJson((new Product(6L, "Shovel", "Dig it", 50.0))))
         ).andReturn().getResponse();
-        assertThat(response.getStatus()).isEqualTo(201);
-        assertThat(response.getRedirectedUrl()).isEqualTo("http://localhost/api/product/6");
+        assertThat(response.getStatus()).isEqualTo(200);
     }
 
     @Test
@@ -66,7 +65,7 @@ class ProductControllerTest {
         MockHttpServletResponse response = mockMvc.perform(delete("/api/product/4")).andReturn().getResponse();
         Optional<Product> deletedProduct = repository.findById(4L);
         assertThat(deletedProduct.isEmpty()).isTrue();
-        assertThat(response.getStatus()).isEqualTo(204);
+        assertThat(response.getStatus()).isEqualTo(200);
     }
 
     @Test
@@ -81,7 +80,7 @@ class ProductControllerTest {
                 .getResponse();
         Product product = repository.findById(2L).orElseThrow();
         assertThat(product.getName()).isEqualTo(newName);
-        assertThat(response.getStatus()).isEqualTo(204);
+        assertThat(response.getStatus()).isEqualTo(200);
 
     }
 

@@ -25,6 +25,6 @@ class CartControllerTest {
                 .getResponse();
         boolean isCreated = repository.findById(3L).isPresent();
         assertThat(isCreated).isTrue();
-        assertThat(response.getStatus()).isEqualTo(204);
+        assertThat(response.getStatus()).isEqualTo(200);
     }
 }

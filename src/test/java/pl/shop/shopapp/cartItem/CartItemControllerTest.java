@@ -37,7 +37,7 @@ class CartItemControllerTest {
         List<CartItem> cartItems = repository.findCartItemByCart_Id(2L);
         Long productId = cartItems.get(1).getProduct().getId();
         assertThat(productId).isEqualTo(4L);
-        assertThat(response.getStatus()).isEqualTo(204);
+        assertThat(response.getStatus()).isEqualTo(200);
     }
 
     @Test
@@ -45,7 +45,7 @@ class CartItemControllerTest {
         MockHttpServletResponse response = mockMvc.perform(delete("/api/cart/1")).andReturn().getResponse();
         Optional<CartItem> removedItem = repository.findById(1L);
         assertThat(removedItem.isEmpty()).isTrue();
-        assertThat(response.getStatus()).isEqualTo(204);
+        assertThat(response.getStatus()).isEqualTo(200);
     }
 
     @Test
@@ -54,6 +54,4 @@ class CartItemControllerTest {
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(response.getContentAsString()).isNotNull();
     }
-
-
 }

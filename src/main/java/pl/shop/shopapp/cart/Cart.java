@@ -3,7 +3,7 @@ package pl.shop.shopapp.cart;
 import jakarta.persistence.*;
 import lombok.*;
 import pl.shop.shopapp.cartItem.CartItem;
-import pl.shop.shopapp.user.User;
+import pl.shop.shopapp.client.Client;
 
 import java.util.Set;
 
@@ -18,10 +18,9 @@ public class Cart {
     private Long id;
 
     @OneToOne
-    private User user;
+    private Client client;
 
-    @OneToMany
-    @JoinColumn(name = "cart_id")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CartItem> cartItems;
 
 }

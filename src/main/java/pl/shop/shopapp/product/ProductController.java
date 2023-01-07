@@ -1,9 +1,5 @@
 package pl.shop.shopapp.product;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jsonpatch.JsonPatchException;
 import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,9 +20,7 @@ import java.util.stream.Collectors;
 public class ProductController {
 
     private final ProductService productService;
-    private final ObjectMapper objectMapper;
     private final int MAX_NUMBER_OF_PRODUCTS_ON_PAGE = 3;
-
 
     @GetMapping
     ResponseEntity<List<ProductDto>> findAll() {
@@ -51,14 +42,8 @@ public class ProductController {
     }
 
     @PostMapping
-    ResponseEntity<ProductDto> addNewProduct(@Valid @RequestBody ProductDto productDto) {
-        ProductDto savedProductDto = productService.addNewProduct(productDto);
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(savedProductDto.getId())
-                .toUri();
-        return ResponseEntity.created(uri).body(savedProductDto);
+    public void addNewProduct(@Valid @RequestBody ProductDto productDto) {
+        productService.addNewProduct(productDto);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -70,28 +55,13 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+    public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
-    ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody JsonMergePatch patch) {
-        try {
-            ProductDto productDto = productService.findProductById(id).orElseThrow();
-            ProductDto patchedProduct = applyPatch(productDto, patch);
-            productService.updateProduct(patchedProduct);
-            return ResponseEntity.noContent().build();
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build();
-        } catch (JsonPatchException | JsonProcessingException e) {
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
-    private ProductDto applyPatch(ProductDto productDto, JsonMergePatch patch) throws JsonProcessingException, JsonPatchException {
-        JsonNode jsonProduct = objectMapper.valueToTree(productDto);
-        JsonNode patchedJsonProduct = patch.apply(jsonProduct);
-        return objectMapper.treeToValue(patchedJsonProduct, ProductDto.class);
+    public void updateProduct(@PathVariable Long id, @RequestBody JsonMergePatch patch) {
+        ProductDto productDto = productService.findProductById(id).orElseThrow();
+        productService.updateProduct(productDto, patch);
     }
 }

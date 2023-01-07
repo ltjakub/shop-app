@@ -1,20 +1,17 @@
-package pl.shop.shopapp.user;
+package pl.shop.shopapp.client;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import pl.shop.shopapp.cart.Cart;
 
 @Entity
 @Getter
 @Setter
 
-@Table(name = "users")
-public class User {
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,7 +26,11 @@ public class User {
     @Email
     private String email;
     @NotNull
-    @Size(min = 1, max = 300)
-    private String password;
+    @Size(min = 1, max = 50)
+    private String phone;
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 
 }

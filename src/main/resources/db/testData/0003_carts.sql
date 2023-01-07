@@ -1,5 +1,5 @@
 INSERT INTO
-    cart(user_id)
+    cart(client_id)
     VALUES
         (1),
         (2);
