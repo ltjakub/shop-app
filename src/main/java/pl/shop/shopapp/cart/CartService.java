@@ -13,7 +13,7 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ClientRepository clientRepository;
 
-    void createCart(Long clientId) {
+    public void createCart(Long clientId) {
             Client client = clientRepository.findById(clientId).orElseThrow(() -> new ResourceNotFoundException(Error.CLIENT_NOT_FOUND.toString()));
             if (!cartRepository.existsByClientId(clientId)) {
                 Cart cart = new Cart();

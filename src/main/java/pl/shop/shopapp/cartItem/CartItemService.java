@@ -23,7 +23,7 @@ public class CartItemService {
     private final CartItemDtoOutputMapper mapper;
     private final ResponseMapper responseMapper;
 
-    void addProductToTheCart(CartItemDto cartItemDto) {
+    public void addProductToTheCart(CartItemDto cartItemDto) {
         if (cartItemRepository.countCartItemByCart_Id(cartItemDto.getCartId()) < 3) {
                 Product product = productRepository.findById(cartItemDto.getProductId()).orElseThrow(() -> new ResourceNotFoundException(Error.PRODUCT_NOT_FOUND.toString()));
                 Cart cart = cartRepository.findById(cartItemDto.getCartId()).orElseThrow(() -> new ResourceNotFoundException(Error.CART_NOT_FOUND.toString()));
@@ -36,11 +36,11 @@ public class CartItemService {
 
     }
 
-    void removeProductFromTheCart(Long id) {
+    public void removeProductFromTheCart(Long id) {
         cartItemRepository.deleteById(id);
     }
 
-    CartItemResponse findAllProductsInTheCart(Long id) {
+    public CartItemResponse findAllProductsInTheCart(Long id) {
         List<CartItemOutputDto> cartItems = cartItemRepository.findCartItemByCart_Id(id)
                 .stream()
                 .map(mapper::map)
