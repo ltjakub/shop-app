@@ -2,6 +2,7 @@ package pl.shop.shopapp.cartItem;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/cart")
 public class CartItemController {
     private final CartItemService cartItemService;
+
 
     @PostMapping
     public void addProductToTheCart(@Valid @RequestBody CartItemDto cartItemDto) {
@@ -46,5 +48,10 @@ public class CartItemController {
         return ex.getBindingResult().getFieldErrors()
                 .stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+    }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    private String handleEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
+        return ex.getMessage();
     }
 }

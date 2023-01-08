@@ -17,7 +17,7 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Product product;
     @ManyToOne
     private Cart cart;

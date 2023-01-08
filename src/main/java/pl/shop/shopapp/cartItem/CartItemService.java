@@ -25,13 +25,13 @@ public class CartItemService {
 
     public void addProductToTheCart(CartItemDto cartItemDto) {
         if (cartItemRepository.countCartItemByCart_Id(cartItemDto.getCartId()) < 3) {
-                Product product = productRepository.findById(cartItemDto.getProductId()).orElseThrow(() -> new ResourceNotFoundException(Error.PRODUCT_NOT_FOUND.toString()));
-                Cart cart = cartRepository.findById(cartItemDto.getCartId()).orElseThrow(() -> new ResourceNotFoundException(Error.CART_NOT_FOUND.toString()));
-                CartItem cartItem = new CartItem();
-                cartItem.setProduct(product);
-                cartItem.setCart(cart);
-                cartItem.setQuantity(cartItemDto.getQuantity());
-                cartItemRepository.save(cartItem);
+            Product product = productRepository.findById(cartItemDto.getProductId()).orElseThrow(() -> new ResourceNotFoundException(Error.PRODUCT_NOT_FOUND.toString()));
+            Cart cart = cartRepository.findById(cartItemDto.getCartId()).orElseThrow(() -> new ResourceNotFoundException(Error.CART_NOT_FOUND.toString()));
+            CartItem cartItem = new CartItem();
+            cartItem.setProduct(product);
+            cartItem.setCart(cart);
+            cartItem.setQuantity(cartItemDto.getQuantity());
+            cartItemRepository.save(cartItem);
         }
 
     }

@@ -3,6 +3,7 @@ package pl.shop.shopapp.product;
 import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,8 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
-        return productService.findProductById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        ProductDto productDto = productService.findProductById(id);
+        return ResponseEntity.ok(productDto);
     }
 
     @PostMapping
@@ -61,7 +61,12 @@ public class ProductController {
 
     @PatchMapping("/{id}")
     public void updateProduct(@PathVariable Long id, @RequestBody JsonMergePatch patch) {
-        ProductDto productDto = productService.findProductById(id).orElseThrow();
+        ProductDto productDto = productService.findProductById(id);
         productService.updateProduct(productDto, patch);
+    }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    private String handleEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
+        return ex.getMessage();
     }
 }

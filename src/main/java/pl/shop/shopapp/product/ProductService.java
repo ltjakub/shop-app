@@ -7,10 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import pl.shop.shopapp.utils.Error;
+import pl.shop.shopapp.utils.exceptions.ResourceNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static pl.shop.shopapp.utils.JsonConverter.applyPatch;
 
@@ -31,9 +32,12 @@ public class ProductService {
         return productRepository.findAll(PageRequest.of(offset, pageSize)).map(mapper::map);
     }
 
-    public Optional<ProductDto> findProductById(Long id) {
-        return productRepository.findById(id).map(mapper::map);
+    public ProductDto findProductById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Error.PRODUCT_NOT_FOUND.toString()));
+        return mapper.map(product);
+
     }
+
 
     public void addNewProduct(ProductDto productDto) {
         Product product = mapper.map(productDto);

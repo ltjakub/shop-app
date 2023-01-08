@@ -20,7 +20,7 @@ public class Cart {
     @OneToOne
     private Client client;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private Set<CartItem> cartItems;
 
 }
