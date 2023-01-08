@@ -32,7 +32,6 @@ class ProductControllerTest {
     @Test
     public void shouldReturn3ProductsOnThePage() throws Exception {
         MockHttpServletResponse response = mockMvc.perform(get("/api/product/page/0")).andReturn().getResponse();
-        System.out.println(response.getContentAsString());
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(response.getContentAsString()).contains("\"id\":1");
         assertThat(response.getContentAsString()).doesNotContain("\"id\":4");
